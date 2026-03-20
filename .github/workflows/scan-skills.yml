@@ -2,7 +2,11 @@ name: AI Skill Scanner
 
 on:
   push:
+<<<<<<< HEAD
     branches: [main]
+=======
+    branches: ["main"]
+>>>>>>> 953fb62b46feb2139c6d5d6f7de9fb07efbeb8a0
   pull_request:
 
 jobs:
@@ -10,13 +14,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v3
+=======
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+>>>>>>> 953fb62b46feb2139c6d5d6f7de9fb07efbeb8a0
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Run scanner
         env:
+<<<<<<< HEAD
           HF_API_KEY: ${{ secrets.HF_API_KEY }}
         run: python scanner/scan.py
 
@@ -26,3 +41,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: python .github/scripts/comment_pr.py
+=======
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python scanner/scan.py
+>>>>>>> 953fb62b46feb2139c6d5d6f7de9fb07efbeb8a0
