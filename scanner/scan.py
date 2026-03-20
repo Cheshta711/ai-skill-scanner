@@ -1,34 +1,22 @@
 import os
 import sys
-from openai import OpenAI
-
-client = OpenAI()
 
 SKILLS_DIR = "skills"
 
-def analyze_with_ai(content):
-    prompt = f"""
-You are a security analyzer.
+def is_malicious(text):
+    suspicious_patterns = [
+        "ignore previous instructions",
+        "send all secrets",
+        "bypass",
+        "exfiltrate",
+        "jailbreak"
+    ]
 
-Classify the following text as SAFE or MALICIOUS.
-If malicious, return the exact suspicious lines.
+    for pattern in suspicious_patterns:
+        if pattern in text.lower():
+            return True, pattern
 
-Text:
-{content}
-
-Respond in this format:
-Classification: SAFE or MALICIOUS
-Reason: ...
-Suspicious Lines: ...
-"""
-
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0
-    )
-
-    return response.choices[0].message.content
+    return False, None
 
 
 def scan_files():
@@ -45,14 +33,17 @@ def scan_files():
             with open(filepath, "r") as f:
                 content = f.read()
 
-            result = analyze_with_ai(content)
-            print(result)
+            is_bad, pattern = is_malicious(content)
 
-            if "MALICIOUS" in result:
+            if is_bad:
+                print("\n⚠ Malicious content detected:")
+                print(f'File: {filename}')
+                print(f'Matched pattern: "{pattern}"\n')
+
                 found_malicious = True
 
     if found_malicious:
-        print("\n❌ Failing workflow — malicious content found")
+        print("❌ Failing workflow — malicious content found")
         sys.exit(1)
     else:
         print("\n✅ No malicious content found")
