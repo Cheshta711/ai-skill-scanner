@@ -22,26 +22,24 @@ def scan():
             with open(path, "r", encoding="utf-8") as f:
                 content = f.read()
 
-            # ✅ AI classification
+            # AI classification
             label, score = classify(content)
+            print("DEBUG:", label, score)
 
-            # 🔥 Rule-based fallback detection
+            # Rule-based detection (FIXED)
             if any(keyword in content.lower() for keyword in [
                 "ignore previous instructions",
-                "send all secrets",
-                "http",
-                "https"
+                "send all secrets"
             ]):
                 label = "malicious"
                 score = max(score, 0.9)
 
-            # ✅ Process malicious content
-            if label == "malicious":
+            # Only act if truly malicious
+            if label == "malicious" and score > 0.5:
                 print(f"⚠ MALICIOUS ({score:.2f})")
 
                 for i, line in enumerate(content.split("\n"), 1):
 
-                    # Skip ignored phrases
                     if any(ignore in line.lower() for ignore in ignore_list):
                         continue
 
@@ -60,12 +58,12 @@ def scan():
                         if severity == "critical":
                             found_critical = True
 
-    # ✅ Save results for PR comments
+    # Save results
     with open("results.txt", "w", encoding="utf-8") as f:
         for r in results:
             f.write(f"{r['file']}:{r['line']} [{r['severity']}] {r['text']}\n")
 
-    # ✅ Final decision
+    # Final decision
     if found_critical:
         print("\n❌ Failing workflow — critical issues found")
         sys.exit(1)
