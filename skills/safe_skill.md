@@ -1,0 +1,1 @@
+This skill summarizes documents safely.
