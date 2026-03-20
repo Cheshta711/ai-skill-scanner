@@ -1,3 +1,9 @@
-test
+You now have a system that:
 
-“The system attempts LLM-based semantic analysis first. If the AI model is unavailable or fails, it automatically falls back to rule-based detection to ensure CI/CD reliability.”
+Uses Hugging Face API
+
+Detects prompt injection / malicious skills
+
+Automatically fails CI pipeline
+
+Can comment on PRs
