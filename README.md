@@ -2,7 +2,7 @@ An AI-powered scanner that detects malicious or unsafe instructions in skill fil
 
 Features
 
-*  Scans `.md` files for unsafe content
+*  Scans .md files for unsafe content
 *  Uses AI API for classification
 *  Detects prompt injection patterns
 *  Hybrid detection (AI + rules)
